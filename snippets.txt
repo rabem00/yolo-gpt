@@ -1,0 +1,17 @@
+        # cls = []
+        # for r in results:
+        #     for c in r.boxes.cls:
+        #         cls.append(self.model.names[int(c)])
+        # print(cls)    
+
+        # Multiple per class
+        # for r in results:
+        #         for c in r.boxes.cls:
+        #             print(self.model.names[int(c)])
+
+        # Only one per class
+        # clist = results[0].boxes.cls
+        # cls = set()
+        # for cno in clist:
+        #     cls.add(self.model.names[int(cno)])
+        # print(cls)

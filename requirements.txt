@@ -1,0 +1,10 @@
+python-dotenv
+streamlit
+streamlit_chat
+ultralytics
+scikit-image
+supervision==0.2.1 #TODO: Newer versions of supervision breaks the code
+langchain==0.0.157 #TODO: Langchain changes to quickly
+openai
+tiktoken
+faiss-cpu
