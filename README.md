@@ -1,6 +1,8 @@
 # YOLO-GPT - Detect and Talk
 YOLO-GPT is an experimental application showcasing the capabilities of the YOLOv8 and GPT-4 models. The results from the YOLOv8 model are stored and can be used by the GPT-4 model. In a way giving the GPT-4 model "eyes" or the ability to interact with the real world!
 
+<img src="yologpt.jpg" alt="yolo-gpt" width="400"/>
+
 ## Quickstart
 1. Get an OpenAI [API Key](https://platform.openai.com/account/api-keys)
 2. Download the [latest release](https://github.com/rabem00/YOLO-GPT/releases/latest)
