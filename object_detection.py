@@ -8,6 +8,10 @@ from time import time
 import ultralytics
 import streamlit as st
 import supervision as sv
+
+from PIL import Image
+from transformers import BlipProcessor, BlipForConditionalGeneration
+
 from config import Config
 
 CFG = Config()
@@ -20,6 +24,8 @@ class ObjectDetection:
         #ultralytics.checks()
         self.capture_index = capture_index
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.processor_cap = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large")
+        self.model_cap = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
 
     def start(self):
         if self.model_type == "Detection":
@@ -95,16 +101,27 @@ class ObjectDetection:
         else:
             no_limit = False
 
+        count = 0
         while vf.isOpened():
             start_time = time()
             ret, frame = vf.read()
             if not ret or (counter >= time_limit and not no_limit):
                 stframe.empty()
                 return store
+            if count % 10 == 0:
+                results, num_class_ids, detection_count = self.predict(frame, confidence)
+                to_store = set(num_class_ids)
 
-            results, num_class_ids, detection_count = self.predict(frame, confidence)
-            store.append(num_class_ids)
-
+                raw_image = Image.fromarray(frame).convert('RGB')
+                text = "a picture of"
+                inputs = self.processor_cap(raw_image, text, return_tensors="pt")
+                out = self.model_cap.generate(**inputs)
+                print(self.processor_cap.decode(out[0], skip_special_tokens=True))
+                print(to_store)
+                # Add to_store with self.processor_cap
+                to_add = self.processor_cap.decode(out[0], skip_special_tokens=True) + " " + str(to_store)
+                store.append(to_add)
+            count += 1
             #st.write("Number of detections: ", detection_count)
             frame = self.plot_bboxes(results, frame)
             counter += 1
